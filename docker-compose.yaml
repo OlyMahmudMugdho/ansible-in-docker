@@ -1,0 +1,38 @@
+services:
+  ansible-ssh:
+    build:
+      context: ./ansible-image/ubuntu
+      dockerfile: Dockerfile
+    container_name: ansible
+    hostname: ansible
+    ports:
+      - "2222:22"
+    volumes:
+      - ansible-data:/opt/ansible-data
+    networks:
+      - ansible-net
+    restart: unless-stopped
+    depends_on:
+      - ubuntu-ssh-server
+
+  ubuntu-ssh-server:
+    build:
+      context: ./ssh-image/ubuntu
+      dockerfile: Dockerfile
+    container_name: ubuntu-ssh-server
+    hostname: ubuntu-1
+    ports:
+      - "2223:22"
+    volumes:
+      - ssh-data:/opt/ssh-data
+    networks:
+      - ansible-net
+    restart: unless-stopped
+
+volumes:
+  ansible-data:
+  ssh-data:
+
+networks:
+  ansible-net:
+    driver: bridge
