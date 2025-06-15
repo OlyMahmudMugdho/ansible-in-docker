@@ -134,7 +134,7 @@ To enable SSH from the Ansible container to the Ubuntu container, follow these s
    Copy the public key to the Ansible container and append it to the `authorized_keys` file:
    ```bash
    docker cp ~/.ssh/id_rsa.pub ansible:/root/.ssh/temp_key.pub
-   docker exec ansible-ssh bash -c "cat /root/.ssh/temp_key.pub >> /root/.ssh/authorized_keys && rm /root/.ssh/temp_key.pub && chmod 600 /root/.ssh/authorized_keys && chown root:root /root/.ssh/authorized_keys"
+   docker exec ansible bash -c "cat /root/.ssh/temp_key.pub >> /root/.ssh/authorized_keys && rm /root/.ssh/temp_key.pub && chmod 600 /root/.ssh/authorized_keys && chown root:root /root/.ssh/authorized_keys"
    ```
 
 3. **Access the Ansible Container**:
@@ -171,6 +171,7 @@ To enable SSH from the Ansible container to the Ubuntu container, follow these s
 
 With SSH configured, you can now run Ansible commands from the Ansible container to manage the Ubuntu container. For example, create an Ansible inventory file and playbook:
 
+Create an inventory file`inventory.yaml`
 ```yaml
 all:
   hosts:
@@ -179,6 +180,7 @@ all:
       ansible_user: root
 ```
 
+Create a playbok `playbook.yaml`
 ```yaml
 - name: Test Ansible Playbook
   hosts: ubuntu-ssh-server
